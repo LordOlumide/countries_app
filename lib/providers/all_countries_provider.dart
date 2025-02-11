@@ -6,6 +6,7 @@ class AllCountriesProvider extends ChangeNotifier {
   List<Country> _allCountriesStore = [];
   List<Country> allCountriesDisplay = [];
 
+  bool isInitialized = false;
   bool isLoading = false;
 
   void setLoadingTo(bool value) {
@@ -18,6 +19,7 @@ class AllCountriesProvider extends ChangeNotifier {
     try {
       _allCountriesStore = await CountriesRepo.getAllCountries();
       allCountriesDisplay = [..._allCountriesStore];
+      isInitialized = true;
     } catch (error) {
       print(error);
     }

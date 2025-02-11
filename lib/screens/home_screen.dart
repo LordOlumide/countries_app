@@ -4,6 +4,7 @@ import 'package:country_info_app/providers/theme_provider.dart';
 import 'package:country_info_app/screens/country_detail_screen.dart';
 import 'package:country_info_app/widgets/country_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,11 +18,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AllCountriesProvider>().getAllCountries();
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (context.read<AllCountriesProvider>().isInitialized == false) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        context.read<AllCountriesProvider>().getAllCountries();
+      });
+    }
   }
 
   @override
