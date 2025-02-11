@@ -1,4 +1,6 @@
-import 'package:country_info_app/providers/theme_provider/theme_provider.dart';
+import 'package:country_info_app/providers/all_countries_provider.dart';
+import 'package:country_info_app/providers/theme_provider.dart';
+import 'package:country_info_app/screens/country_detail_screen.dart';
 import 'package:country_info_app/screens/home_screen.dart';
 import 'package:country_info_app/static/themes.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +13,11 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<ThemeProvider>(
           create: (context) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider<AllCountriesProvider>(
+          create: (context) => AllCountriesProvider(),
         ),
       ],
       child: const CountryInfoApp(),
@@ -34,6 +39,15 @@ class CountryInfoApp extends StatelessWidget {
           themeMode: themeProvider.themeMode,
           routes: {
             HomeScreen.screenId: (context) => const HomeScreen(),
+            CountryDetailScreen.screenId: (context) {
+              final arguments =
+                  ModalRoute.of(context)!.settings.arguments as Map;
+
+              return CountryDetailScreen(
+                country: arguments['country'],
+                countryStates: arguments['countryStates'],
+              );
+            },
           },
           initialRoute: HomeScreen.screenId,
         );

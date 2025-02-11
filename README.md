@@ -1,16 +1,25 @@
 # country_info_app
 
-A new Flutter project.
+This project is  a mobile application that allows users to view a list of countries, 
+see detailed information about a selected country (such as states, country code, 
+flag, and capital).
+It also has light mode and dark mode.
 
-## Getting Started
+## To generate 
+For the app to run, you need to generate an API key. Visit [https://restfulcountries.com/api-documentation/version/1](https://restfulcountries.com/api-documentation/version/1) to generate your API key.
 
-This project is a starting point for a Flutter application.
+## Instructions for running the app:
+- Clone the project from Github to your local machine.
+- Create a file named "debug.env" and store the API key as COUNTRIES_API_KEY. If you name the .env file a different name, you should replace the name in [main.dart](lib/main.dart).
+- Run the project.
 
-A few resources to get you started if this is your first Flutter project:
+## Contributing
+We welcome contributions from the community! To contribute to the project, please follow these steps:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Fork the repository.
+- Create a new branch for your feature or bugfix
+- Make your changes and commit them
+- Push your changes to your forked repository:
+- Open a pull request against the main branch of this repository.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Please ensure that your code follows the project's coding standards and includes appropriate tests.
