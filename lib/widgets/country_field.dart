@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CountryField extends StatelessWidget {
   final String fieldName;
@@ -13,11 +14,12 @@ class CountryField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           fieldName,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -25,7 +27,7 @@ class CountryField extends StatelessWidget {
             fieldValue,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w300),
           ),
         ),
       ],

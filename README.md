@@ -5,21 +5,78 @@ see detailed information about a selected country (such as states, country code,
 flag, and capital).
 It also has light mode and dark mode.
 
-## To generate 
-For the app to run, you need to generate an API key. Visit [https://restfulcountries.com/api-documentation/version/1](https://restfulcountries.com/api-documentation/version/1) to generate your API key.
+### Possible Country Information
+- Common Name
+- Official Name
+- Country code
+- Independence Status
+- Status
+- UN Membership
+- Currencies
+- Capital
+- Region
+- Languages
+- Translations
+- Latitude and longitude
+- LandLocked status
+- Population
+- Timezones
+- Continents
+- Flag
+- Coat of Arms
+- Start of the Week
 
-## Instructions for running the app:
-- Clone the project from Github to your local machine.
-- Create a file named "debug.env" and store the API key as COUNTRIES_API_KEY. If you name the .env file a different name, you should replace the name in [main.dart](lib/main.dart).
-- Run the project.
+## ✨ Features
+- [✔] Filter countries based on continent
+- [✔] Filter countries based on timezone
+- [✔] Search for countries based on name
+- [x] See country name in your preferred language
+
+
+## 📸 ScreenShots
+
+| Light                                                       | Dark                                                       |
+|-------------------------------------------------------------|------------------------------------------------------------|
+| <img src="assets/screenshots/home_light.jpg" width="300">   | <img src="assets/screenshots/home_dark.jpg" width="300">   |
+| <img src="assets/screenshots/detail_light.jpg" width="300"> | <img src="assets/screenshots/detail_dark.jpg" width="300"> |
+
+
+## Dependencies used
+- [**cupertino_icons**](https://pub.dev/packages/cupertino_icons) - iOS-style icons
+- [**provider**](https://pub.dev/packages/provider) - State management solution for configuring App theme
+- [**dio**](https://pub.dev/packages/dio) - HTTP client for API calls
+- [**cached_network_image**](https://pub.dev/packages/cached_network_image) - Efficient image caching and loading
+- [**flutter_screenutil**](https://pub.dev/packages/flutter_screenutil) - Responsive UI design utilities
+- [**intl**](https://pub.dev/packages/intl) - Internationalization and localization utilities
+
+
+## Setup
+- Clone the repository
+  ```bash
+  git clone https://github.com/LordOlumide/countries_app
+  ```
+
+- Install dependencies
+  ```bash
+  flutter pub get
+  ```
+
+- Run the app
+  ```bash
+  flutter run
+  ```
+
+## Platform compability
+- Android
+- iOS
+
 
 ## Contributing
-We welcome contributions from the community! To contribute to the project, please follow these steps:
-
+We welcome contributions from anyone. To contribute to the project, please follow these steps:
 - Fork the repository.
-- Create a new branch for your feature or bugfix
-- Make your changes and commit them
-- Push your changes to your forked repository:
+- Create a new branch for your feature or bugfix.
+- Make your changes and commit them.
+- Push your changes to your forked repository.
 - Open a pull request against the main branch of this repository.
 
 Please ensure that your code follows the project's coding standards and includes appropriate tests.

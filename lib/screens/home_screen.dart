@@ -2,7 +2,7 @@ import 'package:country_info_app/models/country.dart';
 import 'package:country_info_app/providers/all_countries_provider.dart';
 import 'package:country_info_app/providers/theme_provider.dart';
 import 'package:country_info_app/screens/components/countries_display.dart';
-import 'package:country_info_app/screens/components/filter_bar.dart';
+import 'package:country_info_app/screens/components/filter_section.dart';
 import 'package:country_info_app/screens/components/home_screen_searchbar.dart';
 import 'package:country_info_app/screens/country_detail_screen.dart';
 import 'package:country_info_app/widgets/filters_bottom_sheet.dart';
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Column(
                     children: [
                       countriesProvider.isInitialized
-                          ? FilterBar(onFilterPressed: _onFilterPressed)
+                          ? FilterSection(onFilterPressed: _onFilterPressed)
                           : const SizedBox(),
                       SizedBox(height: 16.h),
                       Expanded(

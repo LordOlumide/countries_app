@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_info_app/models/country.dart';
 import 'package:country_info_app/widgets/country_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
-class CountryDetailScreen extends StatelessWidget {
+class CountryDetailScreen extends StatefulWidget {
   static const String screenId = 'country_detail_screen';
 
   final Country country;
@@ -16,48 +18,214 @@ class CountryDetailScreen extends StatelessWidget {
   });
 
   @override
+  State<CountryDetailScreen> createState() => _CountryDetailScreenState();
+}
+
+class _CountryDetailScreenState extends State<CountryDetailScreen> {
+  List<String> imageUrls = [];
+  int displayIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    imageUrls.add(widget.country.flagUrl);
+    if (widget.country.coatOfArmsUrl != null) {
+      imageUrls.add(widget.country.coatOfArmsUrl!);
+    }
+  }
+
+  void nextImage() {
+    setState(() {
+      if (displayIndex == imageUrls.length - 1) {
+        displayIndex = 0;
+      } else {
+        displayIndex++;
+      }
+    });
+  }
+
+  void previousImage() {
+    setState(() {
+      if (displayIndex == 0) {
+        displayIndex = imageUrls.length - 1;
+      } else {
+        displayIndex--;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          country.commonName,
-          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+          widget.country.commonName,
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+      body: Column(
         children: [
-          const SizedBox(height: 10),
+          SizedBox(height: 6.h),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: CachedNetworkImage(
-              imageUrl: country.flagEmoji,
-              fit: BoxFit.contain,
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.r),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned.fill(
+                      child: ColoredBox(color: Colors.grey.withAlpha(100))),
+                  displayIndex == 0
+                      ? CachedNetworkImage(
+                          imageUrl: imageUrls[displayIndex],
+                          fit: BoxFit.fitWidth,
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: imageUrls[displayIndex],
+                          height: 250.h,
+                          fit: BoxFit.contain,
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                  imageUrls.length > 1
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                style: ButtonStyle(
+                                  backgroundColor: WidgetStatePropertyAll(
+                                      Colors.white.withAlpha(80)),
+                                ),
+                                // padding: EdgeInsets.all(10.r),
+                                onPressed: previousImage,
+                                icon: Icon(
+                                  Icons.arrow_back_ios,
+                                  color: Colors.white.withAlpha(220),
+                                ),
+                              ),
+                              IconButton(
+                                style: ButtonStyle(
+                                  backgroundColor: WidgetStatePropertyAll(
+                                      Colors.white.withAlpha(80)),
+                                ),
+                                // padding: EdgeInsets.all(10.r),
+                                onPressed: nextImage,
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white.withAlpha(220),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : const SizedBox(),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 20),
-          CountryField(
-              fieldName: 'Country Name', fieldValue: country.commonName),
-          const SizedBox(height: 5),
-          CountryField(
-              fieldName: 'Capital City',
-              fieldValue: country.capital.join(', ')),
-          const SizedBox(height: 5),
-          CountryField(
-              fieldName: 'Population',
-              fieldValue: country.population.toString()),
-          const SizedBox(height: 5),
-          CountryField(fieldName: 'Country Code', fieldValue: country.cca3),
-          const SizedBox(height: 5),
-          CountryField(
-              fieldName: 'Continents',
-              fieldValue: country.continents.join(', ')),
-          const SizedBox(height: 15),
-          const SizedBox(height: 70),
+          SizedBox(height: 14.h),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              children: [
+                SizedBox(height: 10.h),
+                CountryField(
+                    fieldName: 'Name', fieldValue: widget.country.commonName),
+                SizedBox(height: 4.h),
+                CountryField(
+                    fieldName: 'Official Name',
+                    fieldValue: widget.country.officialName),
+                SizedBox(height: 24.h),
+                //
+                CountryField(
+                  fieldName: 'Population',
+                  fieldValue: commaSeparate(widget.country.population),
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Region',
+                  fieldValue: widget.country.region.toString(),
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Capital City',
+                  fieldValue: widget.country.capital.join(', '),
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Country Code',
+                  fieldValue: widget.country.cca3,
+                ),
+                SizedBox(height: 24.h),
+                //
+                CountryField(
+                  fieldName: 'Continents',
+                  fieldValue: widget.country.continents.join(', '),
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Independent',
+                  fieldValue: widget.country.independent != null
+                      ? widget.country.independent!
+                          ? 'Yes'
+                          : 'No'
+                      : 'Unknown',
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Status',
+                  fieldValue: widget.country.status,
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'UN Member',
+                  fieldValue: widget.country.unMember ? 'Yes' : 'No',
+                ),
+                SizedBox(height: 24.h),
+                //
+                CountryField(
+                  fieldName: 'Currencies',
+                  fieldValue: widget.country.currencies.values
+                      .map((value) => '${value['name']} (${value['symbol']})')
+                      .toList()
+                      .join(', '),
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Languages',
+                  fieldValue:
+                      widget.country.languages.values.toList().join(', '),
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Lat-Long',
+                  fieldValue:
+                      '[${widget.country.latlng[0]} ${widget.country.latlng[0]}]',
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Timezones',
+                  fieldValue: widget.country.timezones.join(', '),
+                ),
+                SizedBox(height: 4.h),
+                CountryField(
+                  fieldName: 'Start of Week',
+                  fieldValue: widget.country.startOfWeek,
+                ),
+                const SizedBox(height: 15),
+                const SizedBox(height: 70),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
+
+  String commaSeparate(int num) => NumberFormat("###,###", "en_US").format(num);
 }

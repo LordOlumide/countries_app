@@ -20,7 +20,7 @@ class Country {
   final List<String> timezones;
   final List<String> continents;
   final String flagUrl;
-  final Map<String, String> coatOfArms;
+  final String? coatOfArmsUrl;
   final String startOfWeek;
 
   Country({
@@ -45,7 +45,7 @@ class Country {
     required this.timezones,
     required this.continents,
     required this.flagUrl,
-    required this.coatOfArms,
+    required this.coatOfArmsUrl,
     required this.startOfWeek,
   });
 
@@ -72,7 +72,7 @@ class Country {
       'timezones': timezones,
       'continents': continents,
       'flagUrl': flagUrl,
-      'coatOfArms': coatOfArms,
+      'coatOfArms': coatOfArmsUrl,
       'startOfWeek': startOfWeek,
     };
   }
@@ -117,7 +117,8 @@ class Country {
       timezones: List<String>.from(map['timezones'], growable: false),
       continents: List<String>.from(map['continents'], growable: false),
       flagUrl: map['flags']['png'] as String,
-      coatOfArms: Map<String, String>.from(map['coatOfArms']),
+      coatOfArmsUrl:
+          Map<String, dynamic>.from(map['coatOfArms'])['png'] as String?,
       startOfWeek: map['startOfWeek'] as String,
     );
   }
