@@ -133,16 +133,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onCountryPressed(Country country) async {
-    final List<String> countryStates = await context
-        .read<AllCountriesProvider>()
-        .getStatesInCountry(country.name);
+    // final List<String> countryStates = await context
+    //     .read<AllCountriesProvider>()
+    //     .getStatesInCountry(country.commonName);
     if (mounted) {
       Navigator.pushNamed(
         context,
         CountryDetailScreen.screenId,
         arguments: {
           'country': country,
-          'countryStates': countryStates,
+          // 'countryStates': countryStates,
         },
       );
     }

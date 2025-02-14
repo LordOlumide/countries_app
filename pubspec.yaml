@@ -12,9 +12,9 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.6
   provider: ^6.1.2
-  flutter_dotenv: ^5.2.1
   dio: ^5.8.0+1
   cached_network_image: ^3.4.1
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_test:
@@ -25,7 +25,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - debug.env
 #    - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

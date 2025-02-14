@@ -1,31 +1,24 @@
 import 'package:country_info_app/models/country.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 abstract class CountriesRepo {
-  // In a production app, I would not use flutter_dotenv to store the API key
-  static String apiKey = dotenv.get('COUNTRIES_API_KEY');
-
-  static String baseUrl = 'https://restfulcountries.com/';
-  static String allCountriesEndpoint = 'api/v1/countries';
+  static String baseUrl = 'https://restcountries.com/';
+  static String allCountriesEndpoint = 'v3.1/all';
 
   static final dio = Dio(
-    BaseOptions(
-      baseUrl: baseUrl,
-      headers: {'Authorization': 'Bearer $apiKey'},
-    ),
+    BaseOptions(baseUrl: baseUrl),
   );
 
   static Future<List<Country>> getAllCountries() async {
     final response = await dio.get(allCountriesEndpoint);
-    final countriesList =
-        List.from(Map<String, dynamic>.from(response.data)['data']);
+    final countriesList = List.from(response.data);
 
     final List<Country> countries = [];
     for (int i = 0; i < countriesList.length; i++) {
       final Country country = Country.fromMap(
         Map<String, dynamic>.from(countriesList[i]),
       );
+      print(country.officialName);
       countries.add(country);
     }
     return countries;

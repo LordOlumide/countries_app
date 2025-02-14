@@ -4,12 +4,10 @@ import 'package:country_info_app/screens/country_detail_screen.dart';
 import 'package:country_info_app/screens/home_screen.dart';
 import 'package:country_info_app/static/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  await dotenv.load(fileName: "debug.env");
-
   runApp(
     MultiProvider(
       providers: [
@@ -30,28 +28,36 @@ class CountryInfoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: themeProvider.themeMode,
-          routes: {
-            HomeScreen.screenId: (context) => const HomeScreen(),
-            CountryDetailScreen.screenId: (context) {
-              final arguments =
-                  ModalRoute.of(context)!.settings.arguments as Map;
-
-              return CountryDetailScreen(
-                country: arguments['country'],
-                countryStates: arguments['countryStates'],
-              );
-            },
-          },
-          initialRoute: HomeScreen.screenId,
-        );
+    return ScreenUtilInit(
+      designSize: const Size(428, 926),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, child) {
+        return child!;
       },
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeProvider.themeMode,
+            routes: {
+              HomeScreen.screenId: (context) => const HomeScreen(),
+              CountryDetailScreen.screenId: (context) {
+                final arguments =
+                    ModalRoute.of(context)!.settings.arguments as Map;
+
+                return CountryDetailScreen(
+                  country: arguments['country'],
+                  // countryStates: arguments['countryStates'],
+                );
+              },
+            },
+            initialRoute: HomeScreen.screenId,
+          );
+        },
+      ),
     );
   }
 }

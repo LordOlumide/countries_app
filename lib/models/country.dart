@@ -1,58 +1,124 @@
 class Country {
-  final String name;
-  final String? fullName;
-  final String statesUrl;
+  final String commonName;
+  final String officialName;
+  final String cca2;
+  final String? ccn3;
+  final String cca3;
+  final bool? independent;
+  final String status;
+  final bool unMember;
+  final Map<String, Map<String, String>> currencies;
+  final List<String> capital;
+  final String region;
+  final Map<String, String> languages;
+  final Map<String, Map<String, String>> translations;
+  final List<double> latlng;
+  final bool? landLocked;
+  final String flagEmoji;
+  final Map<String, String> maps;
+  final int population;
+  final List<String> timezones;
+  final List<String> continents;
   final String flagUrl;
-  final String population;
-  final String capital;
-  final String? currentPresident;
-  final String continent;
-  final String countryCode;
+  final Map<String, String> coatOfArms;
+  final String startOfWeek;
 
-  const Country({
-    required this.name,
-    this.fullName,
-    required this.statesUrl,
-    required this.flagUrl,
-    required this.population,
+  Country({
+    required this.commonName,
+    required this.officialName,
+    required this.cca2,
+    required this.ccn3,
+    required this.cca3,
+    required this.independent,
+    required this.status,
+    required this.unMember,
+    required this.currencies,
     required this.capital,
-    this.currentPresident,
-    required this.continent,
-    required this.countryCode,
+    required this.region,
+    required this.languages,
+    required this.translations,
+    required this.latlng,
+    required this.landLocked,
+    required this.flagEmoji,
+    required this.maps,
+    required this.population,
+    required this.timezones,
+    required this.continents,
+    required this.flagUrl,
+    required this.coatOfArms,
+    required this.startOfWeek,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'fullName': fullName,
-      'statesUrl': statesUrl,
-      'flagUrl': flagUrl,
-      'population': population,
+      'commonName': commonName,
+      'officialName': officialName,
+      'cca2': cca2,
+      'ccn3': ccn3,
+      'cca3': cca3,
+      'independent': independent,
+      'status': status,
+      'unMember': unMember,
+      'currencies': currencies,
       'capital': capital,
-      'currentPresident': currentPresident,
-      'continent': continent,
-      'countryCode': countryCode,
+      'region': region,
+      'languages': languages,
+      'translations': translations,
+      'latlng': latlng,
+      'landLocked': landLocked,
+      'flag': flagEmoji,
+      'maps': maps,
+      'population': population,
+      'timezones': timezones,
+      'continents': continents,
+      'flagUrl': flagUrl,
+      'coatOfArms': coatOfArms,
+      'startOfWeek': startOfWeek,
     };
   }
 
   factory Country.fromMap(Map<String, dynamic> map) {
-    final Map<String, dynamic>? currentPresident =
-        map['current_president'] != null
-            ? Map<String, dynamic>.from(map['current_president'])
-            : null;
-    final Map<String, dynamic> href = Map<String, dynamic>.from(map['href']);
+    final nameMap = Map<String, dynamic>.from(map['name']);
+    final Map<String, Map<String, String>> currencies = {};
+    if (map['currencies'] != null) {
+      Map<String, dynamic>.from(map['currencies'])
+          .forEach((String key, dynamic value) {
+        currencies[key] = Map<String, String>.from(value);
+      });
+    }
+
+    final Map<String, Map<String, String>> translations = {};
+    Map<String, dynamic>.from(map['translations'])
+        .forEach((String key, dynamic value) {
+      translations[key] = Map<String, String>.from(value);
+    });
 
     return Country(
-      name: map['name'] as String,
-      fullName: map['full_name'] as String?,
-      statesUrl: href['states'] as String,
-      flagUrl: href['flag'] as String,
-      population: map['population'] as String,
-      capital: map['capital'] as String,
-      currentPresident:
-          currentPresident != null ? currentPresident['name'] as String? : null,
-      continent: map['continent'] != null ? map['continent'] as String : '',
-      countryCode: map['iso3'] as String,
+      commonName: nameMap['common'] as String,
+      officialName: nameMap['official'] as String,
+      cca2: map['cca2'] as String,
+      ccn3: map['ccn3'] as String?,
+      cca3: map['cca3'] as String,
+      independent: map['independent'] as bool?,
+      status: map['status'] as String,
+      unMember: map['unMember'] as bool,
+      currencies: currencies,
+      capital: map['capital'] != null ? List<String>.from(map['capital']) : [],
+      region: map['region'] as String,
+      languages: map['languages'] != null
+          ? Map<String, String>.from(map['languages'])
+          : {},
+      translations: translations,
+      latlng: List<double>.from(map['latlng'], growable: false),
+      landLocked: map['landLocked'] as bool?,
+      flagEmoji: map['flag'] as String,
+      maps: Map<String, String>.from(map['maps']),
+      population: map['population'] as int,
+      timezones: List<String>.from(map['timezones'], growable: false),
+      continents: List<String>.from(map['continents'], growable: false),
+      flagUrl: map['flags']['png'] as String,
+      coatOfArms: Map<String, String>.from(map['coatOfArms']),
+      startOfWeek: map['startOfWeek'] as String,
     );
   }
 }
