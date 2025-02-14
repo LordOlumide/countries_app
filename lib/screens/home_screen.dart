@@ -1,8 +1,10 @@
 import 'package:country_info_app/models/country.dart';
 import 'package:country_info_app/providers/all_countries_provider.dart';
 import 'package:country_info_app/providers/theme_provider.dart';
+import 'package:country_info_app/screens/components/countries_display.dart';
+import 'package:country_info_app/screens/components/filter_bar.dart';
+import 'package:country_info_app/screens/components/home_screen_searchbar.dart';
 import 'package:country_info_app/screens/country_detail_screen.dart';
-import 'package:country_info_app/widgets/country_container.dart';
 import 'package:country_info_app/widgets/filters_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -65,48 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SizedBox(height: 15.h),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 17.sp,
-                  height: 1.3,
-                ),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  prefixIcon: Icon(Icons.search, size: 22.r),
-                  hintText: 'Search Country',
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 16.sp,
-                    color: context.select<ThemeProvider, bool>(
-                            (provider) => provider.isLightMode)
-                        ? const Color(0xFF667085)
-                        : const Color(0xFFEAECF0),
-                  ),
-                  filled: true,
-                  fillColor: context.select<ThemeProvider, bool>(
-                          (provider) => provider.isLightMode)
-                      ? const Color(0xFFF2F4F7)
-                      : const Color(0xFF98A2B3).withValues(alpha: 0.2),
-                  isDense: true,
-                  isCollapsed: true,
-                  contentPadding: EdgeInsets.symmetric(vertical: 15.h),
-                ),
-                onChanged: (String? newValue) {
-                  if (newValue == null || newValue.isEmpty) {
-                    context.read<AllCountriesProvider>().resetCountries();
-                  } else {
-                    context
-                        .read<AllCountriesProvider>()
-                        .searchCountries(newValue);
-                  }
-                },
-              ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: HomeScreenSearchbar(),
             ),
             SizedBox(height: 16.h),
             Expanded(
@@ -115,66 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Column(
                     children: [
                       countriesProvider.isInitialized
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 24.w),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  MaterialButton(
-                                    onPressed: () => _onFilterPressed(context),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.filter_alt_outlined,
-                                          size: 20.r,
-                                        ),
-                                        SizedBox(width: 11.w),
-                                        Text(
-                                          'Filter',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12.sp,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
+                          ? FilterBar(onFilterPressed: _onFilterPressed)
                           : const SizedBox(),
                       SizedBox(height: 16.h),
                       Expanded(
-                        child: Stack(
-                          children: [
-                            ListView.builder(
-                              padding: EdgeInsets.only(bottom: 50.h),
-                              itemCount:
-                                  countriesProvider.allCountriesDisplay.length,
-                              itemBuilder: (context, index) {
-                                final Country country = countriesProvider
-                                    .allCountriesDisplay[index];
-                                return CountryContainer(
-                                  country: country,
-                                  onPressed: () => _onCountryPressed(country),
-                                );
-                              },
-                            ),
-                            countriesProvider.isLoading
-                                ? Positioned.fill(
-                                    child: ColoredBox(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor
-                                          .withOpacity(0.15),
-                                      child: const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                          ],
+                        child: CountriesDisplay(
+                          countriesProvider: countriesProvider,
+                          onCountryPressed: _onCountryPressed,
                         ),
                       ),
                     ],
