@@ -39,6 +39,9 @@ class HomeScreenSearchbar extends StatelessWidget {
         isCollapsed: true,
         contentPadding: EdgeInsets.symmetric(vertical: 15.h),
       ),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
       onChanged: (String? newValue) {
         if (newValue == null || newValue.isEmpty) {
           context.read<AllCountriesProvider>().resetCountries();

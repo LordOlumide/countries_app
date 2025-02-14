@@ -74,8 +74,6 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Positioned.fill(
-                      child: ColoredBox(color: Colors.grey.withAlpha(100))),
                   displayIndex == 0
                       ? CachedNetworkImage(
                           imageUrl: imageUrls[displayIndex],

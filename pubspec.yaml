@@ -37,9 +37,9 @@ flutter:
   fonts:
     - family: Axiforma
       fonts:
-        - asset: assets/assets/fonts/Axiforma/Axiforma-Thin.ttf
+        - asset: assets/fonts/Axiforma/Axiforma-Thin.ttf
           weight: 100
-        - asset: assets/assets/fonts/Axiforma/Axiforma-ThinItalic.ttf
+        - asset: assets/fonts/Axiforma/Axiforma-ThinItalic.ttf
           weight: 100
           style: italic
         - asset: assets/fonts/Axiforma/Axiforma-Light.ttf
