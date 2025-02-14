@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_info_app/models/country.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CountryContainer extends StatelessWidget {
   final Country country;
@@ -36,16 +37,16 @@ class CountryContainer extends StatelessWidget {
                     country.commonName,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 15,
+                    style: TextStyle(
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
                   const SizedBox(height: 1),
                   Text(
                     country.capital.join(', '),
-                    style: const TextStyle(
-                      fontSize: 15,
+                    style: TextStyle(
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w300,
                     ),
                   ),

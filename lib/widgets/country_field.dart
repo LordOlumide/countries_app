@@ -20,9 +20,13 @@ class CountryField extends StatelessWidget {
           style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
         ),
         const SizedBox(width: 12),
-        Text(
-          fieldValue,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        Expanded(
+          child: Text(
+            fieldValue,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
         ),
       ],
     );

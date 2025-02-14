@@ -3,8 +3,10 @@ import 'package:country_info_app/providers/all_countries_provider.dart';
 import 'package:country_info_app/providers/theme_provider.dart';
 import 'package:country_info_app/screens/country_detail_screen.dart';
 import 'package:country_info_app/widgets/country_container.dart';
+import 'package:country_info_app/widgets/filters_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,15 +35,16 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Explore',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                    style:
+                        TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w700),
                   ),
                   Consumer<ThemeProvider>(
                     builder: (context, themeProvider, child) {
@@ -61,24 +64,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 15.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  height: 1.5,
+                style: TextStyle(
+                  fontSize: 17.sp,
+                  height: 1.3,
                 ),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  prefixIcon: const Icon(Icons.search),
+                  prefixIcon: Icon(Icons.search, size: 22.r),
                   hintText: 'Search Country',
-                  hintStyle: const TextStyle(),
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 16.sp,
+                    color: context.select<ThemeProvider, bool>(
+                            (provider) => provider.isLightMode)
+                        ? const Color(0xFF667085)
+                        : const Color(0xFFEAECF0),
+                  ),
                   filled: true,
+                  fillColor: context.select<ThemeProvider, bool>(
+                          (provider) => provider.isLightMode)
+                      ? const Color(0xFFF2F4F7)
+                      : const Color(0xFF98A2B3).withValues(alpha: 0.2),
+                  isDense: true,
+                  isCollapsed: true,
+                  contentPadding: EdgeInsets.symmetric(vertical: 15.h),
                 ),
                 onChanged: (String? newValue) {
                   if (newValue == null || newValue.isEmpty) {
@@ -91,36 +108,75 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 16.h),
             Expanded(
               child: Consumer<AllCountriesProvider>(
                 builder: (context, countriesProvider, child) {
-                  return Stack(
+                  return Column(
                     children: [
-                      ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 50),
-                        itemCount: countriesProvider.allCountriesDisplay.length,
-                        itemBuilder: (context, index) {
-                          final Country country =
-                              countriesProvider.allCountriesDisplay[index];
-                          return CountryContainer(
-                            country: country,
-                            onPressed: () => _onCountryPressed(country),
-                          );
-                        },
-                      ),
-                      countriesProvider.isLoading
-                          ? Positioned.fill(
-                              child: ColoredBox(
-                                color: Theme.of(context)
-                                    .scaffoldBackgroundColor
-                                    .withOpacity(0.15),
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                      countriesProvider.isInitialized
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  MaterialButton(
+                                    onPressed: () => _onFilterPressed(context),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.filter_alt_outlined,
+                                          size: 20.r,
+                                        ),
+                                        SizedBox(width: 11.w),
+                                        Text(
+                                          'Filter',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             )
-                          : const SizedBox.shrink(),
+                          : const SizedBox(),
+                      SizedBox(height: 16.h),
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            ListView.builder(
+                              padding: EdgeInsets.only(bottom: 50.h),
+                              itemCount:
+                                  countriesProvider.allCountriesDisplay.length,
+                              itemBuilder: (context, index) {
+                                final Country country = countriesProvider
+                                    .allCountriesDisplay[index];
+                                return CountryContainer(
+                                  country: country,
+                                  onPressed: () => _onCountryPressed(country),
+                                );
+                              },
+                            ),
+                            countriesProvider.isLoading
+                                ? Positioned.fill(
+                                    child: ColoredBox(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor
+                                          .withOpacity(0.15),
+                                      child: const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
+                      ),
                     ],
                   );
                 },
@@ -145,6 +201,31 @@ class _HomeScreenState extends State<HomeScreen> {
           // 'countryStates': countryStates,
         },
       );
+    }
+  }
+
+  void _onFilterPressed(BuildContext context) async {
+    final Map<String, dynamic>? values = await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return const FiltersBottomSheet();
+      },
+    );
+    if (values == null) {
+      return;
+    }
+    if (values['selectedContinents'] == null ||
+        values['selectedTimeZones'] == null ||
+        (List.from(values['selectedContinents']).isEmpty &&
+            List.from(values['selectedTimeZones']).isEmpty)) {
+      return;
+    }
+
+    if (context.mounted) {
+      context.read<AllCountriesProvider>().filter(
+            continents: values['selectedContinents'],
+            timeZones: values['selectedTimeZones'],
+          );
     }
   }
 }

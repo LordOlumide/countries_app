@@ -6,8 +6,13 @@ class AllCountriesProvider extends ChangeNotifier {
   List<Country> _allCountriesStore = [];
   List<Country> allCountriesDisplay = [];
 
+  final Set<String> allContinents = {};
+  final Set<String> allTimeZones = {};
+
   bool isInitialized = false;
   bool isLoading = false;
+
+  int get noOfCountriesDisplayed => allCountriesDisplay.length;
 
   void setLoadingTo(bool value) {
     isLoading = value;
@@ -21,6 +26,10 @@ class AllCountriesProvider extends ChangeNotifier {
       _allCountriesStore.sort((a, b) {
         return a.commonName.toLowerCase().compareTo(b.commonName.toLowerCase());
       });
+      for (Country country in _allCountriesStore) {
+        allContinents.addAll(country.continents);
+        allTimeZones.addAll(country.timezones);
+      }
       allCountriesDisplay = [..._allCountriesStore];
       isInitialized = true;
     } catch (error, stacktrace) {
@@ -49,6 +58,25 @@ class AllCountriesProvider extends ChangeNotifier {
                   .isNotEmpty,
         )
         .toList();
+    setLoadingTo(false);
+  }
+
+  void filter(
+      {required List<String> continents, required List<String> timeZones}) {
+    setLoadingTo(true);
+    allCountriesDisplay = _allCountriesStore.where((country) {
+      for (String continent in country.continents) {
+        if (continents.contains(continent)) {
+          return true;
+        }
+      }
+      for (String timeZone in country.timezones) {
+        if (timeZones.contains(timeZone)) {
+          return true;
+        }
+      }
+      return false;
+    }).toList();
     setLoadingTo(false);
   }
 
